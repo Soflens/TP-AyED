@@ -1,1 +1,132 @@
+#include <iostream>
+#include <fstream>
+#include <string.h>
 
+using namespace std;
+
+const int empleadosMaximos = 15;
+const int sucursalesMaximo = 3;
+
+struct Empleado {
+    char nombre[50];
+    int edad;
+    int codigoIdentificacion;
+};
+
+struct Sucursal {
+    Empleado empleados[15];
+    int cantEmpleados;
+};
+
+bool codigoDuplicado(Sucursal sucursales[], int totalSucursales, int codigo) {
+    for (int i = 0; i < totalSucursales; i++) {
+        for (int j = 0; j < sucursales[i].cantEmpleados; j++) {
+            if (sucursales[i].empleados[j].codigoIdentificacion == codigo) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void guardarEmpleadosEnArchivo(Sucursal sucursales[], int totalSucursales, const char* nombreArchivo) {
+    ofstream archivo(nombreArchivo, ios::binary);
+    if (!archivo) {
+        cerr << "Error al abrir el archivo para escritura." << endl;
+        return;
+    }
+
+    for (int i = 0; i < totalSucursales; i++) {
+        for (int j = 0; j < sucursales[i].cantEmpleados; j++) {
+            Empleado& emp = sucursales[i].empleados[j];
+            archivo.write((char*)&emp, sizeof(Empleado));
+        }
+    }
+
+    archivo.close();
+    cout << "Datos guardados exitosamente en " << nombreArchivo << endl;
+}
+
+void mostrarEmpleadosDesdeArchivo(const char* nombreArchivo) {
+    ifstream archivo(nombreArchivo, ios::binary);
+    if (!archivo) {
+        cerr << "Error al abrir el archivo para lectura." << endl;
+        return;
+    }
+
+    Empleado emp;
+    int contador = 1;
+    while (archivo.read((char*)&emp, sizeof(Empleado))) {
+        cout << "Empleado " << contador++ << ":" << endl;
+        cout << "Nombre: " << emp.nombre << endl;
+        cout << "Edad: " << emp.edad << endl;
+        cout << "Código de identificación: " << emp.codigoIdentificacion << endl;
+        cout << endl;
+    }
+
+    archivo.close();
+}
+
+int main() {
+    Sucursal sucursales[sucursalesMaximo];
+    for (int i = 0; i < sucursalesMaximo; i++) {
+        sucursales[i].cantEmpleados = 0;
+    }
+
+    int numEmpleadosTotal = 0;
+
+    while (numEmpleadosTotal < empleadosMaximos) {
+        cout << "Ingrese el número de sucursal donde irá el empleado " << numEmpleadosTotal + 1 << " (1-" << sucursalesMaximo << "): ";
+        int sucursal;
+        cin >> sucursal;
+        cin.ignore();
+
+        if (sucursal < 1 || sucursal > sucursalesMaximo) {
+            cout << "Número de sucursal inválido. Por favor ingrese un número entre 1 y " << sucursalesMaximo << ". " << endl;
+            continue;
+        }
+
+        cout << "Ingrese el nombre del empleado: ";
+        char nombre[50];
+        cin.getline(nombre, 50);
+
+        cout << "Ahora edad del empleado: ";
+        int edad;
+        cin >> edad;
+        cin.ignore();
+
+        cout << "Ahora ingrese el código de identificación del empleado (ej. 123456): ";
+        int codigoIdentificacion;
+        cin >> codigoIdentificacion;
+        cin.ignore();
+
+        if (codigoDuplicado(sucursales, sucursalesMaximo, codigoIdentificacion)) {
+            cout << "Error: Ya existe un empleado con ese código de identificación." << endl;
+            continue;
+        }
+
+        int aux = sucursales[sucursal - 1].cantEmpleados;
+        strcpy(sucursales[sucursal - 1].empleados[aux].nombre, nombre);
+        sucursales[sucursal - 1].empleados[aux].edad = edad;
+        sucursales[sucursal - 1].empleados[aux].codigoIdentificacion = codigoIdentificacion;
+
+        sucursales[sucursal - 1].cantEmpleados++;
+        numEmpleadosTotal++;
+
+        cout << "¿Desea agregar otro empleado? Presione S para sí, caso contrario presione N: ";
+        char respuesta;
+        cin >> respuesta;
+        cin.ignore();
+
+        if (respuesta != 's' && respuesta != 'S') {
+            break;
+        }
+    }
+
+    guardarEmpleadosEnArchivo(sucursales, sucursalesMaximo, "vendedores.dat");
+
+    cout << "\n--- Mostrando empleados desde archivo ---\n" << endl;
+    mostrarEmpleadosDesdeArchivo("vendedores.dat");
+
+    return 0;
+}
