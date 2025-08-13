@@ -6,8 +6,8 @@ using namespace std;
 
 // Constantes Importantes
 
-const int empleadosPorSucursal = 10;      
-const int sucursalesMaximo = 5;           
+const int empleadosPorSucursal = 15;      
+const int sucursalesMaximo = 3;           
 const int empleadosMaximos = empleadosPorSucursal * sucursalesMaximo;
 
 // Agregamos un variable más para facilitar la programación de la parte 3 = int sucursal
