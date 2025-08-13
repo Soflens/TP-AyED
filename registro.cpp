@@ -128,7 +128,7 @@ int main() {
         sucursales[sucursal - 1].cantEmpleados++;
         numEmpleadosTotal++;
 
-        cout << "¿Desea agregar otro empleado? (S/N): ";
+        cout << "¿Desea agregar otro empleado? Presione S para sí, caso contrario presione N: ";
         char respuesta;
         cin >> respuesta;
         cin.ignore();
