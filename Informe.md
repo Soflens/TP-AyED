@@ -1,2 +1,2 @@
 Integrantes del grupo:
-Sofia Lens, Soto Nahuel
+Lens Sofia, Soto Nahuel, Aroni Baca Alexis,
