@@ -1,2 +1,10 @@
-Integrantes del grupo:
-Lens Sofia, Soto Nahuel, Aroni Baca Alexis,
+Integrantes del grupo: Lens Sofia, Soto Nahuel, Aroni Baca Alexis, Gastón Dariana Mariela
+
+El programa está dividido en tres archivos: registro.cpp, ventas.cpp y analisis.cpp
+
+En el registro.cpp permitimos que se pudieran cargar vendedores con un código único asociado, el número de la sucursal a donde pertenecen y el nombre del vendedor correspondiente. Para evitar que dos o más vendedores tuvieran el mismo código, implementamos una función bool que retorna verdadero si los códigos coinciden y entonces marca error.
+Para el almacenamiento de datos, el programa genera un archivo binario en modo escritura llamado vendedores.dat donde se cargan los vendedores con su nombre, sucursal y código respectivo.
+
+Para el ventas.cpp, se pide cargar una fecha de formato AAAAMMDD y luego permite registrar un código de vendedor que compara con el archivo vendedores.dat para saber si el vendedor existe. Si este existe, entonces el programa continúa su ejecución y pide cargar el código del producto y el monto de venta, sino tira error y pide cargar otro código. Si todos los datos son válidos, son almacenados en la estructura “Venta” donde posteriormente se guardan en un archivo binario de escritura llamado ventas_diarias.dat que es generado con la función bool guardarVenta(). Sin embargo, en caso de que el archivo no se pueda abrir, implementamos también un mensaje de error usando cerr.
+
+Por último, para el archivo analisis.cpp, este lee los archivos vendedores.dat y ventas_diarias.dat para poder determinar el vendedor que más plata generó y los productos que más se vendieron. Para hacer esto, almacena la información de los vendedores en un map y luego con el archivo ventas_diarias.dat se calcula el total de cada venta mientras va contabilizando lo que generó cada vendedor, los productos que se vendieron y las sucursales. Si no hay error, entonces el programa muestra los resultados. Si, al igual que en los demás archivos, ocurre un error y el archivo no se puede abrir, el programa lo marca y lo muestra con cerr.
