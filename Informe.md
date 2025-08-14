@@ -1,2 +1,2 @@
 Integrantes del grupo:
-Sofia Lens,
+Sofia Lens, Soto Nahuel
